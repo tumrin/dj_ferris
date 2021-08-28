@@ -1,0 +1,15 @@
+[package]
+edition = "2024"
+name = "dj_ferris"
+version = "0.21.1"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+dotenvy = "0.15.6"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+songbird = "0.5.0"
+serenity = "0.12"
+lavalink-rs = "0.14.1"
+tokio = { version = "1", features = ["rt-multi-thread"] }
