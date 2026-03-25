@@ -48,6 +48,7 @@ Required variables are:
 - DISCORD_TOKEN
 - APPLICATION_ID
 - LAVALINK_SERVER_PASSWORD
+- LAVALINK_SERVER_HOST
 
 ### Development build
 
@@ -56,6 +57,7 @@ Required variables are:
 export DISCORD_TOKEN={bot token} # Set bot token env variable
 export APPLICATION_ID={application id} # Set application id
 export LAVALINK_SERVER_PASSWORD={lavalink password} # From application.yml
+export LAVALINK_SERVER_HOST={lavalink address}
 
 docker-compose -f docker-compose-lavalink.yml up # Run Lavalink with docker
 cargo run
