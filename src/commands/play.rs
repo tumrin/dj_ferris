@@ -44,9 +44,6 @@ pub async fn play(ctx: &Context, interaction: &CommandInteraction) -> FerrisResp
         _ => Err(FerrisError::TrackNotFoundError)?,
     };
 
-    // Send command to Lavalink
-    player.get_queue().append(tracks.clone().into())?;
-
     // Get name and url of the track
     let (name, url) = match query_result.load_type {
         TrackLoadType::Playlist => (
@@ -60,11 +57,24 @@ pub async fn play(ctx: &Context, interaction: &CommandInteraction) -> FerrisResp
         _ => ("Unknown".to_string(), None),
     };
 
-    // Respond in Discord
-    let desciption = if let Some(url) = url {
-        format!("Added [{name}]({url}) to queue")
+    // Send command to Lavalink
+    let description = if player.get_player().await?.track.is_some() {
+        player.get_queue().append(tracks.clone().into())?;
+        if let Some(url) = url {
+            format!("Added [{name}]({url}) to queue")
+        } else {
+            format!("Added {name} to queue")
+        }
     } else {
-        format!("Added {name} to queue")
+        if let Some(url) = url {
+            format!("Started playing [{name}]({url})")
+        } else {
+            format!("Started playing {name}")
+        }
     };
-    Ok(Response::new().description(&desciption).build())
+
+    player.play(&tracks[0].track).await?;
+
+    // Respond in Discord
+    Ok(Response::new().description(&description).build())
 }
