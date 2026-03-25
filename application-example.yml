@@ -9,7 +9,12 @@ plugins:
     allowDirectPlaylistIds: true # Whether just playlist IDs can match. If false, only complete URLs will be loaded.
     # The clients to use for track loading. See below for a list of valid clients.
     # Clients are queried in the order they are given (left-to-right)
-    clients: ["MUSIC", "WEB", "WEBEMBEDDED"]
+    clients:
+      - MUSIC
+      - ANDROID_VR
+      - WEB
+      - MWEB
+      - WEBEMBEDDED
 lavalink:
   plugins:
     - dependency: "dev.lavalink.youtube:youtube-plugin:<version>"
