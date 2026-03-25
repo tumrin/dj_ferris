@@ -35,6 +35,10 @@ async fn main() {
             env::var("LAVALINK_SERVER_PASSWORD")
                 .expect("Expected LAVALINK_SERVER_PASSWORD in .env or environment variable")
         });
+    let lavalink_server_host: String = dotenvy::var("LAVALINK_SERVER_HOST").unwrap_or_else(|_| {
+        env::var("LAVALINK_SERVER_HOST")
+            .expect("Expected LAVALINK_SERVER_HOST in .env or environment variable")
+    });
     #[allow(deprecated)]
     let framework = StandardFramework::new();
     let config = Config::default();
@@ -54,7 +58,7 @@ async fn main() {
         .expect("Error creating serenity client");
 
     let nodes = NodeBuilder {
-        hostname: "localhost:2333".to_string(),
+        hostname: format!("{lavalink_server_host}:2333"),
         is_ssl: false,
         events: events::Events::default(),
         user_id: lavalink_rs::model::UserId(
