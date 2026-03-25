@@ -1,6 +1,6 @@
 use super::get_command_context;
 use crate::{FerrisError, FerrisResponse, Response};
-use lavalink_rs::model::player::ConnectionInfo;
+use lavalink_rs::model::{ChannelId, player::ConnectionInfo};
 use serenity::{
     all::{CommandInteraction, Mentionable},
     client::Context,
@@ -31,6 +31,7 @@ pub async fn join(ctx: &Context, interaction: &CommandInteraction) -> FerrisResp
                 endpoint: connection_info.endpoint,
                 token: connection_info.token,
                 session_id: connection_info.session_id,
+                channel_id: Some(ChannelId(channel_id.into())),
             },
         )
         .await?;
