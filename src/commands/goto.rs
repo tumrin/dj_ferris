@@ -12,7 +12,7 @@ pub async fn goto(ctx: &Context, interaction: &CommandInteraction) -> FerrisResp
         Err(FerrisError::LavalinkError)?
     };
     let position =
-        get_goto_position(&get_args(interaction.data.options.clone())?, ctx, guild_id).await?;
+        get_goto_position(&get_args(&interaction.data.options.clone())?, ctx, guild_id).await?;
 
     // Check that something is playing
     if player

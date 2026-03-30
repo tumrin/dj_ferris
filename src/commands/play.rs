@@ -20,7 +20,7 @@ pub async fn play(ctx: &Context, interaction: &CommandInteraction) -> FerrisResp
     else {
         Err(FerrisError::LavalinkError)?
     };
-    let url = get_args(interaction.data.options.clone())?;
+    let url = get_args(&interaction.data.options)?;
     let query = if url.starts_with("http") {
         url.to_string()
     } else {

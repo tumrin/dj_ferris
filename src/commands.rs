@@ -26,7 +26,7 @@ pub async fn get_songbird_manager(ctx: &Context) -> Arc<Songbird> {
         .expect("Songbird Voice client placed in at initialisation.")
 }
 
-fn get_args(args: Vec<CommandDataOption>) -> Result<String, FerrisError> {
+fn get_args(args: &[CommandDataOption]) -> Result<String, FerrisError> {
     if let CommandDataOptionValue::String(arg) = args[0].clone().value {
         Ok(arg)
     } else {

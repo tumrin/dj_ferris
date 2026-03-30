@@ -21,14 +21,12 @@ pub async fn loop_track(ctx: &Context, interaction: &CommandInteraction) -> Ferr
     // If we are looping, remove looping track, else add current track as looping track
     let description = if data.is_some() {
         (*data) = None;
-        format!("Stop looping {}", current_song.info.title)
+        format!("Stop looping {}", &current_song.info.title)
     } else {
+        let response_string = format!("Start looping {}", &current_song.info.title);
         (*data) = Some(LoopingTrack(current_song.clone()));
-        player
-            .get_queue()
-            .push_to_front(current_song.clone())
-            .unwrap_or(());
-        format!("Start looping {}", current_song.info.title)
+        player.get_queue().push_to_front(current_song).unwrap_or(());
+        response_string
     };
 
     // Respond in Discord

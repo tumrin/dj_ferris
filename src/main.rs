@@ -90,7 +90,7 @@ async fn main() {
     // This block is here to release RWLock after lavalink client has been added to data
     {
         let mut data = client.data.write().await;
-        data.insert::<Lavalink>(lava_client.clone());
+        data.insert::<Lavalink>(lava_client);
     }
 
     client
