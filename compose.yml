@@ -3,15 +3,15 @@ services:
     depends_on:
       - lavalink
     restart: always
-    container_name: ferris
+    container_name: dj-ferris
     environment:
       - DISCORD_TOKEN=$DISCORD_TOKEN
       - APPLICATION_ID=$APPLICATION_ID
       - LAVALINK_SERVER_PASSWORD=$LAVALINK_SERVER_PASSWORD # set password for lavalink
       - LAVALINK_SERVER_HOST=${LAVALINK_SERVER_HOST:-lavalink} # set host for lavalink
-    image: ferris
+    image: dj-ferris
     networks:
-      - ferris
+      - dj-ferris
 
   lavalink:
     image: ghcr.io/lavalink-devs/lavalink:4 # pin the image version to Lavalink v4
@@ -26,7 +26,7 @@ services:
       - ./application.yml:/opt/Lavalink/application.yml # mount application.yml from the same directory or use environment variables
       - ./plugins/:/opt/Lavalink/plugins/ # persist plugins between restarts, make sure to set the correct permissions (user: 322, group: 322)
     networks:
-      - ferris
+      - dj-ferris
 
 networks:
-  ferris:
+  dj-ferris:
