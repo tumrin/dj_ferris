@@ -1,15 +1,15 @@
 use super::get_command_context;
 use crate::{FerrisError, FerrisResponse, LoopingTrack, Response};
 use serenity::{all::CommandInteraction, client::Context};
-use tokio::sync::Mutex;
+use tokio::sync::RwLock;
 
 pub async fn loop_track(ctx: &Context, interaction: &CommandInteraction) -> FerrisResponse {
     let (_, lava_client, Some(player), _) = get_command_context(ctx, interaction).await? else {
         Err(FerrisError::LavalinkError)?
     };
 
-    let mutex = lava_client.data::<Mutex<Option<LoopingTrack>>>()?;
-    let mut data = mutex.lock().await;
+    let mutex = lava_client.data::<RwLock<Option<LoopingTrack>>>()?;
+    let mut data = mutex.write().await;
 
     // Try to get current song and return error if this fails
     let current_song = player

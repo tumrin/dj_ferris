@@ -1,7 +1,7 @@
 use super::get_command_context;
 use crate::{FerrisError, FerrisResponse, LoopingTrack, Response, get_queue};
 use serenity::{all::CommandInteraction, client::Context};
-use tokio::sync::Mutex;
+use tokio::sync::RwLock;
 
 pub async fn skip(ctx: &Context, interaction: &CommandInteraction) -> FerrisResponse {
     // Init variables
@@ -10,8 +10,6 @@ pub async fn skip(ctx: &Context, interaction: &CommandInteraction) -> FerrisResp
         Err(FerrisError::LavalinkError)?
     };
 
-    let mutex = lava_client.data::<Mutex<Option<LoopingTrack>>>()?;
-    let mut data = mutex.lock().await;
     let final_track = get_queue(&lava_client, guild_id).await?.get_count().await? == 0;
 
     let track = player
@@ -20,10 +18,14 @@ pub async fn skip(ctx: &Context, interaction: &CommandInteraction) -> FerrisResp
         .track
         .ok_or(FerrisError::QueueEmptyError)?;
 
-    // If we are looping, remove looping track
-    if data.is_some() {
-        (*data) = None;
-    }
+    {
+        let mutex = lava_client.data::<RwLock<Option<LoopingTrack>>>()?;
+        let mut data = mutex.write().await;
+        // If we are looping, remove looping track
+        if data.is_some() {
+            (*data) = None;
+        }
+    } // Drop mutex immediately after it is no longer used
 
     // Send command to Lavalink
     player.skip()?;

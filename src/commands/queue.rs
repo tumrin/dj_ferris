@@ -3,7 +3,7 @@ use crate::{FerrisError, FerrisResponse, LoopingTrack, MAX_DESCRIPTION_SIZE, Res
 use lavalink_rs::player_context::TrackInQueue;
 use serenity::{all::CommandInteraction, client::Context, futures::StreamExt};
 use std::fmt::Write;
-use tokio::sync::Mutex;
+use tokio::sync::RwLock;
 
 pub async fn queue(ctx: &Context, interaction: &CommandInteraction) -> FerrisResponse {
     // Init variables
@@ -17,8 +17,8 @@ pub async fn queue(ctx: &Context, interaction: &CommandInteraction) -> FerrisRes
         Err(FerrisError::QueueEmptyError)?;
     }
 
-    let mutex = lava_client.data::<Mutex<Option<LoopingTrack>>>()?;
-    let looping = mutex.lock().await;
+    let mutex = lava_client.data::<RwLock<Option<LoopingTrack>>>()?;
+    let looping = mutex.read().await;
 
     // Construct queue
     let mut queue_string = String::new();

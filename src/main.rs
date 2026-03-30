@@ -12,7 +12,7 @@ use serenity::framework::StandardFramework;
 use serenity::{client::Client, prelude::GatewayIntents};
 use songbird::{Config, SerenityInit};
 use std::{env, sync::Arc};
-use tokio::sync::Mutex;
+use tokio::sync::RwLock;
 use tracing::{Level, log::error};
 use tracing_subscriber::EnvFilter;
 
@@ -83,7 +83,7 @@ async fn main() {
         events,
         vec![nodes],
         NodeDistributionStrategy::default(),
-        Arc::new(Mutex::new(looping)),
+        Arc::new(RwLock::new(looping)),
     )
     .await;
 

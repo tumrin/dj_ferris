@@ -17,7 +17,7 @@ use serenity::{
     model::gateway::Ready,
     model::prelude::VoiceState,
 };
-use tokio::sync::Mutex;
+use tokio::sync::RwLock;
 use tracing::{info, log::error, warn};
 
 pub struct Handler;
@@ -140,8 +140,8 @@ impl EventHandler for Handler {
 
 #[hook]
 pub async fn track_start(client: LavalinkClient, _session_id: String, event: &TrackStart) {
-    let mutex = client.data::<Mutex<Option<LoopingTrack>>>().unwrap();
-    let data = mutex.lock().await;
+    let mutex = client.data::<RwLock<Option<LoopingTrack>>>().unwrap();
+    let data = mutex.read().await;
     let player_context = client.get_player_context(event.guild_id);
 
     if let (Some(player), Some(looping_track)) = (player_context, &*data) {
